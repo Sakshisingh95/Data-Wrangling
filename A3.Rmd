@@ -1,0 +1,118 @@
+---
+title: "Assignment 3"
+author: "Sakshi Singh"
+date: "2024-03-23"
+output: html_document
+---
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+
+#Reading the dataset
+diagnosis_data <- read.csv("C:/Users/amanu/Downloads/DW3_set_exercise.csv")
+
+#Changing the name of the columns for better understanding
+colnames(diagnosis_data) <- c("No.","Patient_ID", "Diagnosis_Code", "Date_of_Diagnosis")
+
+colnames(diagnosis_data)
+str(diagnosis_data)
+
+# Defining Diabetes codes
+diabetes_codes <- c("E08", "E09", "E10", "E11", "E13")
+
+# Filter the dataset to find all patients with Diabetes using the codes above
+diabetes_patients <- diagnosis_data %>%
+  filter(Diagnosis_Code %in% diabetes_codes)
+
+# 1. Diabetes Set
+# a. Find all patients with Diabetes using the codes above by listing their patient IDs.
+diabetes_patients <- diagnosis_data %>%
+  filter(Diagnosis_Code %in% diabetes_codes)
+
+# Displaying the patient IDs with Diabetes
+cat("Patients with Diabetes:\n")
+print(unique(diabetes_patients$Patient_ID))
+
+# b. Finding the cardinality of the Diabetes set.
+cardinality_diabetes <- length(unique(diabetes_patients$Patient_ID))
+cat("Cardinality of Diabetes set:", cardinality_diabetes, "\n")
+
+# 2. COVID Set
+
+# COVID codes
+covid_codes <- c("U07.1", "J12.82")
+
+# a. Find all patients with COVID using the codes above by listing their patient IDs.
+covid_patients <- diagnosis_data %>% 
+  filter(Diagnosis_Code %in% covid_codes)
+
+# Displaying the patient IDs with COVID
+cat("Patients with COVID:\n")
+print(unique(covid_patients$Patient_ID))
+
+# b. Finding the cardinality of the COVID set.
+cardinality_covid <- length(unique(covid_patients$Patient_ID))
+cat("Cardinality of COVID set:", cardinality_covid, "\n")
+
+# 3. Intersection Set
+# a. Find all patients with Diabetes and COVID using the codes above by listing their patient IDs.
+intersection_patients <- intersect(diabetes_patients$Patient_ID, covid_patients$Patient_ID)
+
+# Displaying the patient IDs with both Diabetes and COVID
+cat("Patients with both Diabetes and COVID:\n")
+print(intersection_patients)
+
+# Finding the cardinality of the Intersection set
+cardinality_intersection <- length(intersection_patients)
+cat("Cardinality of Intersection set:", cardinality_intersection, "\n")
+
+# 4. Union Set
+# a. Find all patients with Diabetes or COVID using the codes above by listing their patient IDs.
+union_patients <- union(diabetes_patients$Patient_ID, covid_patients$Patient_ID)
+
+# displaying the patient IDs with either Diabetes or COVID
+cat("Patients with either Diabetes or COVID:\n")
+print(union_patients)
+
+# b. Finding the cardinality of the Union set.
+cardinality_union <- length(union_patients)
+cat("Cardinality of Union set:", cardinality_union, "\n")
+
+# 5. Draw a Venn diagram
+library(VennDiagram)
+
+# Creating sets for Diabetes, COVID, Intersection, and Union
+set_diabetes <- unique(diabetes_patients$Patient_ID)
+set_covid <- unique(covid_patients$Patient_ID)
+set_intersection <- intersection_patients
+set_union <- union_patients
+
+# Creating the Venn diagram
+venn.plot <- venn.diagram(
+  x = list(Diabetes = set_diabetes, COVID = set_covid),
+  category.names = c("Diabetes", "COVID"),
+  filename = NULL
+)
+
+# Displaying the Venn diagram
+grid.draw(venn.plot)
+
+# 6. Diabetes only after COVID Set
+# a. Now including the date of diagnosis, we are finding all the patients with Diabetes only after they had COVID by listing their patient IDs.
+diabetes_only_after_covid <- diabetes_patients %>%
+  filter(Patient_ID %in% set_diabetes & !(Patient_ID %in% set_covid))
+
+# Displaying the patient IDs with Diabetes only after COVID
+cat("Patients with Diabetes only after COVID:\n")
+print(unique(diabetes_only_after_covid$Patient_ID))
+
+# b. Find the cardinality of the Diabetes only after COVID set.
+cardinality_diabetes_only_after_covid <- length(unique(diabetes_only_after_covid$Patient_ID))
+cat("Cardinality of Diabetes only after COVID set:", cardinality_diabetes_only_after_covid, "\n")
+
+# c. Provide a count breakdown for each of the diabetes codes occurring only after COVID
+count_breakdown <- table(diabetes_only_after_covid$Diagnosis_Code)
+print("Count breakdown for each of the diabetes codes occurring only after COVID:")
+print(count_breakdown)
+```

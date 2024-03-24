@@ -1,0 +1,9 @@
+INFO [2024-03-22 19:36:05] $x
+INFO [2024-03-22 19:36:05] list(Diabetes = set_diabetes, COVID = set_covid)
+INFO [2024-03-22 19:36:05] 
+INFO [2024-03-22 19:36:05] $category.names
+INFO [2024-03-22 19:36:05] c("Diabetes", "COVID")
+INFO [2024-03-22 19:36:05] 
+INFO [2024-03-22 19:36:05] $filename
+INFO [2024-03-22 19:36:05] NULL
+INFO [2024-03-22 19:36:05] 
